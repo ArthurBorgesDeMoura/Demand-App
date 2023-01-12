@@ -6,5 +6,5 @@ public class Category : BaseEntity
 {
     [Required]
     public string Name{ get; set; }
-    public bool Request { get; set; } = true;
+    public bool Active { get; set; } = true;
 }
