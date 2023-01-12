@@ -1,5 +1,6 @@
 ﻿using IDemandApp.Data;
 using IDemandApp.Domain.Products;
+using IDemandApp.Endpoints.Categories.DTO;
 using Microsoft.AspNetCore.Authorization;
 
 namespace IDemandApp.Endpoints.Categories;
@@ -10,17 +11,15 @@ public class CategoryPost
     public static string[] Methods => new string[] { HttpMethod.Post.ToString() };
     public static Delegate Handle => Action;
 
-    [AllowAnonymous]
     public static IResult Action(CategoryRequestDTO request, ApplicationDbContext context)
     {
-        var category = new Category
+        var category = new Category(request.Name, "Test", "Test");
+
+        if (!category.IsValid)
         {
-            Name = request.Name,
-            CreatedBy = "Test",
-            CreatedAt = DateTime.Now,
-            UpdatedBy = "Test",
-            UpdatedAt = DateTime.Now,
-        };
+            return Results.ValidationProblem(category.Notifications.ConvertToProblemDetails());
+        }
+
         context.Categories.Add(category);
         context.SaveChanges();
         return Results.Created($"/categories/{category.Id}", category.Id);
