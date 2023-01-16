@@ -2,6 +2,7 @@
 using IDemandApp.Domain.Products;
 using IDemandApp.Endpoints.Categories.DTO;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace IDemandApp.Endpoints.Categories;
 
@@ -11,9 +12,12 @@ public class CategoryPost
     public static string[] Methods => new string[] { HttpMethod.Post.ToString() };
     public static Delegate Handle => Action;
 
-    public static IResult Action(CategoryRequestDTO request, ApplicationDbContext context)
+    [Authorize(Policy = "EmployeePolicy")]
+
+    public static IResult Action(CategoryRequestDTO request, ApplicationDbContext context, HttpContext http)
     {
-        var category = new Category(request.Name, "Test", "Test");
+        var userId = http.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
+        var category = new Category(request.Name, userId, userId);
 
         if (!category.IsValid)
         {
