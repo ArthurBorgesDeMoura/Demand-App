@@ -1,7 +1,4 @@
-﻿using Flunt.Validations;
-using System.ComponentModel.DataAnnotations;
-
-namespace IDemandApp.Domain.Products;
+﻿namespace IDemandApp.Domain.Products;
 
 public class Category : BaseEntity
 {

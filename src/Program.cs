@@ -1,14 +1,3 @@
-using IDemandApp.Data;
-using IDemandApp.Data.Repository;
-using IDemandApp.Endpoints.Categories;
-using IDemandApp.Endpoints.Employees;
-using IDemandApp.Endpoints.Security;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -81,5 +70,17 @@ app.MapMethods(EmployeePost.Template, EmployeePost.Methods, EmployeePost.Handle)
 app.MapMethods(EmployeeGetAll.Template, EmployeeGetAll.Methods, EmployeeGetAll.Handle);
 app.MapMethods(CategoryGetAll.Template, CategoryGetAll.Methods, CategoryGetAll.Handle);
 app.MapMethods(CategoryPut.Template, CategoryPut.Methods, CategoryPut.Handle);
+
+app.UseExceptionHandler("/error");
+app.Map("/error", (HttpContext http) =>
+{
+    var error = http.Features?.Get<IExceptionHandlerFeature>()?.Error;
+    if (error != null)
+    {
+        if (error is SqlException)
+            return Results.Problem(title: "Database is Down", statusCode: 500);
+    }
+    return Results.Problem(title: "An error occured", statusCode: 500);
+});
 
 app.Run();

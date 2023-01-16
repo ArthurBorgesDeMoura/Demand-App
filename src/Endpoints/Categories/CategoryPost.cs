@@ -1,10 +1,4 @@
-﻿using IDemandApp.Data;
-using IDemandApp.Domain.Products;
-using IDemandApp.Endpoints.Categories.DTO;
-using Microsoft.AspNetCore.Authorization;
-using System.Security.Claims;
-
-namespace IDemandApp.Endpoints.Categories;
+﻿namespace IDemandApp.Endpoints.Categories;
 
 public class CategoryPost
 {
@@ -14,7 +8,7 @@ public class CategoryPost
 
     [Authorize(Policy = "EmployeePolicy")]
 
-    public static IResult Action(CategoryRequestDTO request, ApplicationDbContext context, HttpContext http)
+    public static async Task<IResult> Action(CategoryRequestDTO request, ApplicationDbContext context, HttpContext http)
     {
         var userId = http.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
         var category = new Category(request.Name, userId, userId);
@@ -24,8 +18,8 @@ public class CategoryPost
             return Results.ValidationProblem(category.Notifications.ConvertToProblemDetails());
         }
 
-        context.Categories.Add(category);
-        context.SaveChanges();
+        await context.Categories.AddAsync(category);
+        await context.SaveChangesAsync();
         return Results.Created($"/categories/{category.Id}", category.Id);
     }
 }

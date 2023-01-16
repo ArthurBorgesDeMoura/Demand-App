@@ -1,9 +1,4 @@
-﻿using IDemandApp.Data;
-using IDemandApp.Endpoints.Categories.DTO;
-using Microsoft.AspNetCore.Authorization;
-using System.Security.Claims;
-
-namespace IDemandApp.Endpoints.Categories;
+﻿namespace IDemandApp.Endpoints.Categories;
 
 public class CategoryPut
 {
