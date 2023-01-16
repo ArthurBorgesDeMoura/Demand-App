@@ -1,7 +1,4 @@
-﻿using Flunt.Notifications;
-using System.ComponentModel.DataAnnotations;
-
-namespace IDemandApp.Domain;
+﻿namespace IDemandApp.Domain;
 
 public abstract class BaseEntity : Notifiable<Notification>
 {

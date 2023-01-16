@@ -1,8 +1,4 @@
-﻿using Dapper;
-using IDemandApp.Endpoints.Employees.DTO;
-using Microsoft.Data.SqlClient;
-
-namespace IDemandApp.Data.Repository;
+﻿namespace IDemandApp.Data.Repository;
 
 public class UserRepository
 {
@@ -13,7 +9,7 @@ public class UserRepository
         this.configuration = configuration;
     }
 
-    public IEnumerable<EmployeeResponseDTO> GetAll(int page, int rows)
+    public async Task<IEnumerable<EmployeeResponseDTO>> GetAll(int page, int rows)
     {
         var conn = new SqlConnection(configuration["Database:ConnectionString"]);
 
@@ -22,10 +18,9 @@ public class UserRepository
                       on u.Id = uc.UserId and uc.ClaimType = 'Name'
                       order by Name 
                       offset (@page -1) * @rows rows fetch next @rows rows only";
-        var u = conn.Query<EmployeeResponseDTO>(
+        return await conn.QueryAsync<EmployeeResponseDTO>(
             query,
             new { page, rows }
             );
-        return u;
     }
 }

@@ -1,7 +1,4 @@
-﻿using IDemandApp.Data;
-using IDemandApp.Endpoints.Categories.DTO;
-
-namespace IDemandApp.Endpoints.Categories;
+﻿namespace IDemandApp.Endpoints.Categories;
 
 public class CategoryGetAll
 {

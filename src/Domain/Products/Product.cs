@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace IDemandApp.Domain.Products;
+﻿namespace IDemandApp.Domain.Products;
 
 public class Product : BaseEntity
 {

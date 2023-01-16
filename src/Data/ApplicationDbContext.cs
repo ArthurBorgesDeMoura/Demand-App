@@ -1,10 +1,4 @@
-﻿using Flunt.Notifications;
-using IDemandApp.Domain.Products;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
-
-namespace IDemandApp.Data;
+﻿namespace IDemandApp.Data;
 
 public class ApplicationDbContext : IdentityDbContext<IdentityUser>
 {

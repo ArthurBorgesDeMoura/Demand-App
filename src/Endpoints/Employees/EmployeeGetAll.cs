@@ -1,7 +1,4 @@
-﻿using IDemandApp.Data.Repository;
-using Microsoft.AspNetCore.Authorization;
-
-namespace IDemandApp.Endpoints.Employees;
+﻿namespace IDemandApp.Endpoints.Employees;
 
 [Authorize(Policy = "EmployeePolicy")]
 
@@ -11,10 +8,8 @@ public class EmployeeGetAll
     public static string[] Methods => new string[] { HttpMethod.Get.ToString() };
     public static Delegate Handle => Action;
 
-    public static IResult Action(int page, int rows, UserRepository userRepository)
-    {
-        //if(page == null || page)
-        
-        return Results.Ok(userRepository.GetAll(page, rows));
+    public static async Task<IResult> Action(int page, int rows, UserRepository userRepository)
+    {        
+        return Results.Ok(await userRepository.GetAll(page, rows));
     }
 }
