@@ -1,13 +1,9 @@
-﻿using Dapper;
-using IDemandApp.Data;
-using IDemandApp.Data.Repository;
-using IDemandApp.Domain.Products;
-using IDemandApp.Endpoints.Employees.DTO;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.Data.SqlClient;
-using System.Security.Claims;
+﻿using IDemandApp.Data.Repository;
+using Microsoft.AspNetCore.Authorization;
 
 namespace IDemandApp.Endpoints.Employees;
+
+[Authorize(Policy = "EmployeePolicy")]
 
 public class EmployeeGetAll
 {
