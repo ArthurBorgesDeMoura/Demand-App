@@ -7,17 +7,8 @@ public class EmployeePost
     public static Delegate Handle => Action;
 
     [Authorize(Policy = "EmployeePolicy")]
-    public static async Task<IResult> Action(EmployeeRequestDTO request, UserManager<IdentityUser> userManager, HttpContext http)
+    public static async Task<IResult> Action(EmployeeRequestDTO request, UserRepository userRepository, HttpContext http)
     {
-        var user = new IdentityUser
-        {
-            UserName = request.Email,
-            Email = request.Email,
-        };
-        var result = await userManager.CreateAsync(user, request.Password);
-        if (!result.Succeeded)
-            return Results.ValidationProblem(result.Errors.ConvertToProblemDetails());
-
         var userClaims = new List<Claim>
         {
             new Claim("EmployeeCode", request.EmployeeCode),
@@ -25,10 +16,10 @@ public class EmployeePost
             new Claim("CreatedBy", http.User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value)
         };
 
-        var claimResult = await userManager.AddClaimsAsync(user, userClaims);
-        if (!claimResult.Succeeded)
-            return Results.BadRequest(claimResult.Errors);
+        (IdentityResult identity, string userId) result = await userRepository.CreateUser(request.Email, request.Password, userClaims);
+        if (!result.identity.Succeeded)
+            return Results.BadRequest(result.identity.Errors);
 
-        return Results.Created($"/employees/{user.Id}", user.Id);
+        return Results.Created($"/employees/{result.userId}", result.userId);
     }
 }
