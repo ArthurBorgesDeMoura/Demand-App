@@ -7,8 +7,15 @@ public class TokenPost
     public static Delegate Handle => Action;
 
     [AllowAnonymous]
-    public static IResult Action(LoginRequestDTO request, UserManager<IdentityUser> userManager, IConfiguration configuration)
+    public static IResult Action
+        (LoginRequestDTO request, 
+        UserManager<IdentityUser> userManager, 
+        IConfiguration configuration, 
+        ILogger<TokenPost> logger, 
+        IWebHostEnvironment env)
     {
+        logger.LogInformation("Getting Token");
+
         var user = userManager.FindByEmailAsync(request.Email).Result;
 
         if (!userManager.CheckPasswordAsync(user, request.Password).Result || user == null)
@@ -29,7 +36,7 @@ public class TokenPost
             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
             Audience = configuration["Security:Audience"],
             Issuer = configuration["Security:Issuer"],
-            Expires = DateTime.UtcNow.AddSeconds(600)
+            Expires = env.IsDevelopment() || env.IsStaging() ? DateTime.UtcNow.AddYears(1) : DateTime.UtcNow.AddSeconds(120)
         };
 
         var tokenHandler = new JwtSecurityTokenHandler();

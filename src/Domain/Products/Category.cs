@@ -6,6 +6,7 @@ public class Category : BaseEntity
     public string Name { get; private set; }
     public bool Active { get; private set; } = true;
 
+
     public Category(string name, string createdBy, string updatedBy)
     {
         Name = name;
@@ -23,7 +24,6 @@ public class Category : BaseEntity
         Active = active;
         UpdatedBy = updatedBy;
         UpdatedAt = DateTime.Now;
-
         Validate();
     }
 

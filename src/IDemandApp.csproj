@@ -8,31 +8,31 @@
 	
 	<ItemGroup>
 
-		<Using Include="Flunt.Notifications"/>
-		<Using Include="Flunt.Validations"/>
-		<Using Include="Microsoft.AspNetCore.Diagnostics"/>
-		<Using Include="Microsoft.AspNetCore.Identity"/>
-		<Using Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore"/>
-		<Using Include="Microsoft.AspNetCore.Authorization"/>
-		<Using Include="Microsoft.EntityFrameworkCore"/>
-		<Using Include="Microsoft.Data.SqlClient"/>
-		<Using Include="Microsoft.IdentityModel.Tokens"/>
-		<Using Include="Microsoft.AspNetCore.Authentication.JwtBearer"/>
-		<Using Include="System.IdentityModel.Tokens.Jwt"/>
-		<Using Include="System.Text"/>
-		<Using Include="System.ComponentModel.DataAnnotations"/>
-		<Using Include="System.Security.Claims"/>
-		<Using Include="Dapper"/>
+		<Using Include="Flunt.Notifications" />
+		<Using Include="Flunt.Validations" />
+		<Using Include="Microsoft.AspNetCore.Diagnostics" />
+		<Using Include="Microsoft.AspNetCore.Identity" />
+		<Using Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" />
+		<Using Include="Microsoft.AspNetCore.Authorization" />
+		<Using Include="Microsoft.EntityFrameworkCore" />
+		<Using Include="Microsoft.Data.SqlClient" />
+		<Using Include="Microsoft.IdentityModel.Tokens" />
+		<Using Include="Microsoft.AspNetCore.Authentication.JwtBearer" />
+		<Using Include="System.IdentityModel.Tokens.Jwt" />
+		<Using Include="System.Text" />
+		<Using Include="System.ComponentModel.DataAnnotations" />
+		<Using Include="System.Security.Claims" />
+		<Using Include="Dapper" />
 		
-		<Using Include="IDemandApp.Data"/>
-		<Using Include="IDemandApp.Data.Repository"/>
-		<Using Include="IDemandApp.Domain.Products"/>
-		<Using Include="IDemandApp.Endpoints.Categories"/>
-		<Using Include="IDemandApp.Endpoints.Employees"/>
-		<Using Include="IDemandApp.Endpoints.Security"/>
-		<Using Include="IDemandApp.Endpoints.Employees.DTO"/>
-		<Using Include="IDemandApp.Endpoints.Categories.DTO"/>
-		<Using Include="IDemandApp.Endpoints.Security.DTO"/>
+		<Using Include="IDemandApp.Data" />
+		<Using Include="IDemandApp.Data.Repository" />
+		<Using Include="IDemandApp.Domain.Products" />
+		<Using Include="IDemandApp.Endpoints.Categories" />
+		<Using Include="IDemandApp.Endpoints.Employees" />
+		<Using Include="IDemandApp.Endpoints.Security" />
+		<Using Include="IDemandApp.Endpoints.Employees.DTO" />
+		<Using Include="IDemandApp.Endpoints.Categories.DTO" />
+		<Using Include="IDemandApp.Endpoints.Security.DTO" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -46,6 +46,8 @@
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.2" />
+		<PackageReference Include="Serilog.AspNetCore" Version="6.1.0" />
+		<PackageReference Include="Serilog.Sinks.MSSqlServer" Version="6.1.0" />
 		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
 	</ItemGroup>
 

@@ -9,8 +9,8 @@ public class CategoryGetAll
 
     public static IResult Action(ApplicationDbContext context)
     {
-        var categories = context.Categories.ToList();
-        var response = categories.Select(c => new CategoryResposeDTO {Id = c.Id, Name = c.Name, Active = c.Active });  
+        var categories = context.Categories.AsNoTracking().ToList();
+        var response = categories.Select(c => new CategoryResponseDTO(c.Id, c.Name, c.Active));
         return Results.Ok(response); 
     }
 }
