@@ -10,6 +10,6 @@ public class EmployeeGetAll
 
     public static async Task<IResult> Action(int page, int rows, UserRepository userRepository)
     {        
-        return Results.Ok(await userRepository.GetAll(page, rows));
+        return Results.Ok(await userRepository.GetAllEmployees(page, rows));
     }
 }

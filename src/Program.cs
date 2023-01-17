@@ -1,4 +1,5 @@
 
+using IDemandApp.Endpoints.Costumers;
 using IDemandApp.Endpoints.Products;
 using Serilog;
 using Serilog.Sinks.MSSqlServer;
@@ -47,7 +48,7 @@ builder.Services.AddAuthorization(options =>
       .Build();
     options.AddPolicy("EmployeePolicy", p =>
         p.RequireAuthenticatedUser().RequireClaim("EmployeeCode"));
-    options.AddPolicy("CpfPolicy", p =>
+    options.AddPolicy("CostumerPolicy", p =>
         p.RequireAuthenticatedUser().RequireClaim("Cpf"));
 });
 builder.Services.AddAuthentication(x =>
@@ -87,10 +88,16 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.MapMethods(TokenPost.Template, TokenPost.Methods, TokenPost.Handle);
+
+app.MapMethods(CostumerPost.Template, CostumerPost.Methods, CostumerPost.Handle);
+app.MapMethods(CostumerGet.Template, CostumerGet.Methods, CostumerGet.Handle);
+
 app.MapMethods(EmployeePost.Template, EmployeePost.Methods, EmployeePost.Handle);
 app.MapMethods(EmployeeGetAll.Template, EmployeeGetAll.Methods, EmployeeGetAll.Handle);
+
 app.MapMethods(CategoryGetAll.Template, CategoryGetAll.Methods, CategoryGetAll.Handle);
 app.MapMethods(CategoryPut.Template, CategoryPut.Methods, CategoryPut.Handle);
+
 app.MapMethods(ProductPost.Template, ProductPost.Methods, ProductPost.Handle);
 app.MapMethods(ProductGetAll.Template, ProductGetAll.Methods, ProductGetAll.Handle);
 app.MapMethods(ProductGetById.Template, ProductGetById.Methods, ProductGetById.Handle);
