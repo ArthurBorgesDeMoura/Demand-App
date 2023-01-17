@@ -1,8 +1,29 @@
+
+using IDemandApp.Endpoints.Products;
+using Serilog;
+using Serilog.Sinks.MSSqlServer;
+using System.Text.Json;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddSqlServer<ApplicationDbContext>(builder.Configuration["Database:ConnectionString"]);
+
+builder.Host.UseSerilog((ctx, lc) =>
+{
+    lc.ReadFrom.Configuration(builder.Configuration)
+        .Enrich.FromLogContext()
+        .Enrich.WithProperty("App", "IDemandApp")
+        .WriteTo.MSSqlServer(
+    connectionString: builder.Configuration["Database:ConnectionString"],
+    sinkOptions: new MSSqlServerSinkOptions()
+    {
+        AutoCreateSqlTable = true,
+        TableName = "Logs"
+    });
+
+});
 
 builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
 {
@@ -70,6 +91,10 @@ app.MapMethods(EmployeePost.Template, EmployeePost.Methods, EmployeePost.Handle)
 app.MapMethods(EmployeeGetAll.Template, EmployeeGetAll.Methods, EmployeeGetAll.Handle);
 app.MapMethods(CategoryGetAll.Template, CategoryGetAll.Methods, CategoryGetAll.Handle);
 app.MapMethods(CategoryPut.Template, CategoryPut.Methods, CategoryPut.Handle);
+app.MapMethods(ProductPost.Template, ProductPost.Methods, ProductPost.Handle);
+app.MapMethods(ProductGetAll.Template, ProductGetAll.Methods, ProductGetAll.Handle);
+app.MapMethods(ProductGetById.Template, ProductGetById.Methods, ProductGetById.Handle);
+app.MapMethods(ProductGetShowcase.Template, ProductGetShowcase.Methods, ProductGetShowcase.Handle);
 
 app.UseExceptionHandler("/error");
 app.Map("/error", (HttpContext http) =>
@@ -79,6 +104,11 @@ app.Map("/error", (HttpContext http) =>
     {
         if (error is SqlException)
             return Results.Problem(title: "Database is Down", statusCode: 500);
+        if (error is BadHttpRequestException ex2)
+            return Results.Problem(title: "Failed to read parameter, see all the information sent", statusCode: 422);
+        if (error is Exception ex)
+            return Results.Problem(title: ex.Message, statusCode: 500);
+        
     }
     return Results.Problem(title: "An error occured", statusCode: 500);
 });
