@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using IDemandApp.Domain.Orders;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace IDemandApp.Domain.Products;
 
@@ -13,6 +14,7 @@ public class Product : BaseEntity
     public bool HasStock { get; private set; }
     [Column(TypeName = "decimal(10, 2)")]
     public decimal Price { get; private set; }
+    public ICollection<Order> Orders {  get; private set; } 
 
     private Product() { }
 
@@ -37,7 +39,7 @@ public class Product : BaseEntity
         var contract = new Contract<Product>()
             .IsNotNullOrEmpty(Name, "Name")
             .IsGreaterOrEqualsThan(Name, 3, "Name")
-            .IsNotNull(Category, "Category", "Category not found")
+            //.IsNotNull(Category, "Category", "Category not found")
             .IsGreaterThan(Price, 0, "Price")
             .IsNotNullOrEmpty(CreatedBy, "CreatedBy")
             .IsNotNullOrEmpty(UpdatedBy, "UpdatedBy");

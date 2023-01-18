@@ -1,5 +1,6 @@
 
 using IDemandApp.Endpoints.Costumers;
+using IDemandApp.Endpoints.Orders;
 using IDemandApp.Endpoints.Products;
 using Serilog;
 using Serilog.Sinks.MSSqlServer;
@@ -16,6 +17,7 @@ builder.Host.UseSerilog((ctx, lc) =>
     lc.ReadFrom.Configuration(builder.Configuration)
         .Enrich.FromLogContext()
         .Enrich.WithProperty("App", "IDemandApp")
+        .WriteTo.Console()
         .WriteTo.MSSqlServer(
     connectionString: builder.Configuration["Database:ConnectionString"],
     sinkOptions: new MSSqlServerSinkOptions()
@@ -36,6 +38,7 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
 }).AddEntityFrameworkStores<ApplicationDbContext>();
 
 builder.Services.AddScoped<UserRepository>();
+builder.Services.AddScoped<ProductRepository>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -96,28 +99,33 @@ app.MapMethods(EmployeePost.Template, EmployeePost.Methods, EmployeePost.Handle)
 app.MapMethods(EmployeeGetAll.Template, EmployeeGetAll.Methods, EmployeeGetAll.Handle);
 
 app.MapMethods(CategoryGetAll.Template, CategoryGetAll.Methods, CategoryGetAll.Handle);
+app.MapMethods(CategoryPost.Template, CategoryPost.Methods, CategoryPost.Handle);
 app.MapMethods(CategoryPut.Template, CategoryPut.Methods, CategoryPut.Handle);
 
 app.MapMethods(ProductPost.Template, ProductPost.Methods, ProductPost.Handle);
 app.MapMethods(ProductGetAll.Template, ProductGetAll.Methods, ProductGetAll.Handle);
 app.MapMethods(ProductGetById.Template, ProductGetById.Methods, ProductGetById.Handle);
 app.MapMethods(ProductGetShowcase.Template, ProductGetShowcase.Methods, ProductGetShowcase.Handle);
+app.MapMethods(ProductGetReport.Template, ProductGetReport.Methods, ProductGetReport.Handle);
 
+app.MapMethods(OrderPost.Template, OrderPost.Methods, OrderPost.Handle);
+app.MapMethods(OrderGetByCostumerId.Template, OrderGetByCostumerId.Methods, OrderGetByCostumerId.Handle);
+app.MapMethods(OrderGetById.Template, OrderGetById.Methods, OrderGetById.Handle);
 app.UseExceptionHandler("/error");
-app.Map("/error", (HttpContext http) =>
-{
-    var error = http.Features?.Get<IExceptionHandlerFeature>()?.Error;
-    if (error != null)
-    {
-        if (error is SqlException)
-            return Results.Problem(title: "Database is Down", statusCode: 500);
-        if (error is BadHttpRequestException ex2)
-            return Results.Problem(title: "Failed to read parameter, see all the information sent", statusCode: 422);
-        if (error is Exception ex)
-            return Results.Problem(title: ex.Message, statusCode: 500);
+//app.Map("/error", (HttpContext http) =>
+//{
+//    var error = http.Features?.Get<IExceptionHandlerFeature>()?.Error;
+//    if (error != null)
+//    {
+//        if (error is SqlException)
+//            return Results.Problem(title: "Database is Down", statusCode: 500);
+//        if (error is BadHttpRequestException ex2)
+//            return Results.Problem(title: "Failed to read parameter, see all the information sent", statusCode: 422);
+//        if (error is Exception ex)
+//            return Results.Problem(title: ex.Message, statusCode: 500);
         
-    }
-    return Results.Problem(title: "An error occured", statusCode: 500);
-});
+//    }
+//    return Results.Problem(title: "An error occured", statusCode: 500);
+//});
 
 app.Run();

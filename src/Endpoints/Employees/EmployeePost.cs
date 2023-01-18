@@ -13,7 +13,8 @@ public class EmployeePost
         {
             new Claim("EmployeeCode", request.EmployeeCode),
             new Claim("Name", request.Name),
-            new Claim("CreatedBy", http.User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value)
+            new Claim("CreatedBy", http.User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value),
+            new Claim("Role", "Employee")
         };
 
         (IdentityResult identity, string userId) result = await userRepository.CreateUser(request.Email, request.Password, userClaims);

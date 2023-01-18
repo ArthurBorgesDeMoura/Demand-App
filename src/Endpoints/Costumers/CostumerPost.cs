@@ -15,6 +15,7 @@ public class CostumerPost
         {
             new Claim("Cpf", request.Cpf),
             new Claim("Name", request.Name),
+            new Claim("Role", "Costumer")
         };
 
         (IdentityResult identity, string userId) result = await userRepository.CreateUser(request.Email,request.Password, userClaims);
