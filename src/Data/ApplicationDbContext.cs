@@ -1,9 +1,12 @@
-﻿namespace IDemandApp.Data;
+﻿using IDemandApp.Domain.Orders;
+
+namespace IDemandApp.Data;
 
 public class ApplicationDbContext : IdentityDbContext<IdentityUser>
 {
     public DbSet<Product> Products { get; set; }
     public DbSet<Category> Categories { get; set; }
+    public DbSet<Order> Orders { get; set; }
 
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
 
@@ -11,6 +14,11 @@ public class ApplicationDbContext : IdentityDbContext<IdentityUser>
     {
         base.OnModelCreating(builder);
         builder.Ignore<Notification>();
+
+        builder.Entity<Order>()
+            .HasMany(o => o.Products)
+            .WithMany(p => p.Orders)
+            .UsingEntity(x => x.ToTable("OrderProducts"));
     }
     protected override void ConfigureConventions(ModelConfigurationBuilder config)
     {

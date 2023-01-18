@@ -28,7 +28,7 @@ public class ProductGetShowcase
         var queryFilter = queryBase.Skip((page - 1) * rows).Take(rows);
 
         var products = queryFilter.ToList();
-        var result = products.Select(p => new ProductShowcaseResponseDTO(p.Name, p.Category.Name, p.Description, p.Price));
+        var result = products.Select(p => new ProductShowcaseResponseDTO(p.Id, p.Name, p.Category.Name, p.Description, p.Price));
         return Results.Ok(result);
     }
 
